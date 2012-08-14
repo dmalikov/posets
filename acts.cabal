@@ -21,6 +21,7 @@ Library
   HS-Source-Dirs:       src/
 
   Exposed-Modules:      Data.Poset,
+                        Data.Poset.Morphism,
                         Data.Semilattice
 
   GHC-Options:          -Wall

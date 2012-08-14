@@ -60,10 +60,10 @@ isAntisymmetric (Poset es rs) = and
 --
 isTransitive ∷ Poset → Bool
 isTransitive p@(Poset es _) = and
-  [ a `br` c | a ← es, b ← es, c ← es
-  , a `br` b
-  , b `br` c
-  ] where br = binaryRelation p
+  [ a `ρ` c | a ← es, b ← es, c ← es
+  , a `ρ` b
+  , b `ρ` c
+  ] where ρ = binaryRelation p
 
 -- | Check poset correctness
 --
