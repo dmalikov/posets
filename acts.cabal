@@ -1,0 +1,32 @@
+Name:                   acts
+Version:                0.0.0
+Category:               Math
+Synopsis:               Acts over monoids
+Description:            In mathematics, an act X is an algebraic structure consisting of a monoid S and specific morphism $ (X \times S) \to X$.
+
+License:                MIT
+License-file:           LICENSE
+
+Author:                 Dmitry Malikov
+Maintainer:             Dmitry Malikov <malikov.d.y@gmail.com>
+
+Build-type:             Simple
+Cabal-version:          >= 1.6
+Homepage:               _
+
+Library
+  Build-Depends:        base >= 3 && < 5,
+                        containers
+
+  HS-Source-Dirs:       src/
+
+  Exposed-Modules:      Data.Poset,
+                        Data.Semilattice
+
+  GHC-Options:          -Wall
+
+
+Source-repository head
+  type:                 git
+  location:             _
+
