@@ -1,6 +1,7 @@
 {-# LANGUAGE UnicodeSyntax #-}
 module Data.Poset where
 
+import Data.Function (on)
 import Data.Graph (buildG, reachable)
 import Data.List (intersect, nub)
 import Data.Maybe (listToMaybe)
@@ -80,12 +81,20 @@ isValidE = isValid . expand
 lowerCone ∷ Poset → Int → [Int]
 lowerCone (Poset es rs) = reachable $ buildG (1, length es) rs
 
--- | Infinums of Poset is an intersection of lowerCones of all elements
+-- | infimums of Poset is an intersection of lowerCones of all elements
 --
-infinums ∷ Poset → [Int]
-infinums p@(Poset es _) = foldl1 intersect $ map (lowerCone p) es
+infimums ∷ Poset → [Int]
+infimums p@(Poset es _) = foldl1 intersect $ map (lowerCone p) es
 
--- | Infinum is an infinums with `Maybe' handle
+-- | infimum is an infimums with `Maybe' handle
 --
-infinum ∷ Poset → Maybe Int
-infinum = listToMaybe . infinums
+infimum ∷ Poset → Maybe Int
+infimum = listToMaybe . infimums
+
+-- | Find infinum of 2 elements of Poset
+--
+infimums' ∷ Poset → Int → Int → [Int]
+infimums' p = intersect `on` (lowerCone p)
+
+infimum' ∷ Poset → Int → Int → Maybe Int
+infimum' p a b = listToMaybe $ infimums' p a b
