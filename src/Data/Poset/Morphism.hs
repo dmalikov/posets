@@ -1,6 +1,7 @@
 {-# LANGUAGE UnicodeSyntax #-}
 module Data.Poset.Morphism where
 
+import Control.Monad (replicateM)
 import Data.Poset
 import Prelude hiding ((>>))
 
@@ -13,12 +14,12 @@ type Morph = IM.IntMap Int
 
 -- | Build Morph from list
 --
-fromList ∷ [(Int,Int)] → Morph
-fromList = IM.fromList
+morph ∷ [(Int,Int)] → Morph
+morph = IM.fromList
 
 -- | Apply Morph to Poset element
 --
-infixr 6 >>
+infixr 7 >>
 
 (>>) ∷ Morph → Int → Int
 m >> a = m IM.! a
@@ -54,3 +55,21 @@ fixed m p@(Poset es _) = and
   [ a == (m >> a) | b ← es, b == (m >> b), a ← es, a `ρ` b ]
     where ρ = binaryRelation p
 
+-- | Check for:
+-- - isotone property
+-- - reducibility
+-- - idempotency
+-- - fixity
+--
+isValid ∷ Morph → Poset → Bool
+isValid m p = and
+  [ isotone m p
+  , reducible m p
+  , idempotent m p
+  , fixed m p
+  ]
+
+-- | Generate all possible Morphs over n-size set
+--
+generate ∷ Int → [Morph]
+generate n = map (morph . zip [1..]) $ replicateM n [1..n]
