@@ -1,8 +1,8 @@
-Name:                   acts
+Name:                   int-posets
 Version:                0.0.0
 Category:               Math
-Synopsis:               Acts over monoids
-Description:            In mathematics, an act X is an algebraic structure consisting of a monoid S and specific morphism $ (X \times S) \to X$.
+Synopsis:               Posets as Ints
+Description:            
 
 License:                MIT
 License-file:           LICENSE
