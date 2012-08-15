@@ -5,7 +5,7 @@ import Data.Maybe (isJust)
 
 import Data.Poset
 
--- | Semilattice is Poset if infimum for every two elements exists
+-- | Semilattice is a Poset if infimum for every two elements exists
 --
 isSemilattice ∷ Poset → Bool
 isSemilattice p@(Poset es _) = and

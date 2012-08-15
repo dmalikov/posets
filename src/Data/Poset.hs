@@ -26,8 +26,8 @@ data Poset = Poset
 -- | Relation between two spicified elements of current Poset
 --
 binaryRelation ∷ Poset → Int → Int → Bool
-binaryRelation (Poset es rs) a b = and
-  [ a `elem` es, b `elem` es, (a,b) `elem` rs ]
+binaryRelation (Poset es rs) a b =
+  a `elem` es && b `elem` es && (a,b) `elem` rs
 
 -- | Relation between two spicified elements of expanded Poset
 --
@@ -94,7 +94,7 @@ infimum = listToMaybe . infimums
 -- | Find infinum of 2 elements of Poset
 --
 infimums' ∷ Poset → Int → Int → [Int]
-infimums' p = intersect `on` (lowerCone p)
+infimums' p = intersect `on` lowerCone p
 
 infimum' ∷ Poset → Int → Int → Maybe Int
 infimum' p a b = listToMaybe $ infimums' p a b
