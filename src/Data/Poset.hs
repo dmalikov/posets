@@ -6,80 +6,73 @@ import Data.Graph (buildG, reachable)
 import Data.List (intersect, nub)
 import Data.Maybe (listToMaybe)
 
-data Poset = Poset
--- | Set of elements
+-- | Binary relation
+-- `relation a b` is True iff `a ρ b`.
 --
-  { elements ∷ [Int]
-
--- | Binary relation ρ setted by list of connected pairs of elements
---
--- | ρ should be:
+-- | Binary relation ρ should be:
 -- |   reflexive: α ρ α ;
 -- |   antisymmetric: if α ρ β and β ρ α ⇒ α = β ;
--- |   transitive: if α ρ β and β ρ γ ⇒ α ρ γ
+-- |   transitive: if α ρ β and β ρ γ ⇒ α ρ γ .
 --
-  , relations ∷ [(Int,Int)]
+type Relation = Int → Int → Bool
 
-  } deriving (Eq, Show, Read)
+data Poset = Poset [Int] Relation
 
-
--- | Relation between two spicified elements of current Poset
+-- | Build poset from a list of pairs connected by a binary relation
 --
-binaryRelation ∷ Poset → Int → Int → Bool
-binaryRelation (Poset es rs) a b =
-  a `elem` es && b `elem` es && (a,b) `elem` rs
+fromPairs ∷ [Int] → [(Int,Int)] → Poset
+fromPairs es rs = Poset es $ \a b → (a,b) `elem` rs
 
--- | Relation between two spicified elements of expanded Poset
+-- | fromPairs with satisfying reflexivity and transitivity
 --
-binaryRelationE ∷ Poset → Int → Int → Bool
-binaryRelationE = binaryRelation . expand
-
--- | expand Poset - apply reflexivity and transitivity
---
-expand ∷ Poset → Poset
-expand (Poset es rs) = Poset es allPairs
-  where allPairs = nub [ (a,b) | a ← es, b ← reachable graph a ]
+fromPairsE ∷ [Int] → [(Int,Int)] → Poset
+fromPairsE es rs = Poset es $ \a b → (a,b) `elem` expandedRelations
+  where expandedRelations = nub [ (a,b) | a ← es, b ← reachable graph a ]
         graph = buildG (1, length es) rs
+
+-- | Get poset elements
+--
+elements ∷ Poset → [Int]
+elements (Poset es _) = es
+
+-- | Get poset relation
+--
+relation ∷ Poset → Relation
+relation (Poset _ ρ) = ρ
 
 -- | Check Poset reflexivity
 --
 isReflexive ∷ Poset → Bool
-isReflexive (Poset es rs) = and
-  [ (a,a) `elem` rs | a ← es ]
+isReflexive (Poset es ρ) = and [ a `ρ` a  | a ← es ]
 
 -- | Check Poset antisymmetry
 --
 isAntisymmetric ∷ Poset → Bool
-isAntisymmetric (Poset es rs) = and
+isAntisymmetric (Poset es ρ) = and
   [ a == b | a ← es, b ← es
-  , (a,b) `elem` rs
-  , (b,a) `elem` rs
+  , a `ρ` b
+  , b `ρ` a
   ]
 
 -- | Check Poset transitivity
 --
 isTransitive ∷ Poset → Bool
-isTransitive p@(Poset es _) = and
+isTransitive (Poset es ρ) = and
   [ a `ρ` c | a ← es, b ← es, c ← es
   , a `ρ` b
   , b `ρ` c
-  ] where ρ = binaryRelation p
+  ]
 
 -- | Check poset correctness
 --
 isValid ∷ Poset → Bool
 isValid p = isReflexive p && isAntisymmetric p && isTransitive p
 
--- | Check correctness of expanded Poset
---
-isValidE ∷ Poset → Bool
-isValidE = isValid . expand
-
 -- | Find LowerCone of Poset element
 --  LowerCone is a set of elements connected with element by Binary Relation ρ
 --
 lowerCone ∷ Poset → Int → [Int]
-lowerCone (Poset es rs) = reachable $ buildG (1, length es) rs
+lowerCone (Poset es ρ) a = [ b | b ← es, b `ρ` a ]
 
 -- | infimums of Poset is an intersection of lowerCones of all elements
 --

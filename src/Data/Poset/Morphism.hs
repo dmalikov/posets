@@ -43,17 +43,15 @@ m >> a = m IM.! a
 -- a ρ b ⇒ Morph(a) ρ Morph(b)
 --
 isotone ∷ Poset → Morph → Bool
-isotone p@(Poset es _) m = and
+isotone (Poset es ρ) m = and
   [ (m >> a) `ρ` (m >> b) | a ← es, b ← es, a `ρ` b ]
-    where ρ = binaryRelation p
 
 -- | Check for reducibility
 -- Morph(a) ρ a
 --
 reducible ∷ Poset → Morph → Bool
-reducible p@(Poset es _) m = and
+reducible (Poset es ρ) m = and
   [ (m >> a) `ρ` a | a ← es ]
-    where ρ = binaryRelation p
 
 -- | Check for idempotency
 -- Morph ∘ Morph ≡ Morph
@@ -66,9 +64,8 @@ idempotent (Poset es _) m = and
 -- b ≡ Morph(b) AND a ρ b ⇒ a ≡ Morph(a)
 --
 fixed ∷ Poset → Morph → Bool
-fixed p@(Poset es _) m = and
+fixed (Poset es ρ) m = and
   [ a == (m >> a) | b ← es, b == (m >> b), a ← es, a `ρ` b ]
-    where ρ = binaryRelation p
 
 -- | Check for:
 -- - isotone property;
