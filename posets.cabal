@@ -1,8 +1,8 @@
-Name:                   int-posets
-Version:                0.0.0
+Name:                   posets
+Version:                0.1
 Category:               Math
-Synopsis:               Posets as Ints
-Description:            
+Synopsis:               Posets
+Description:            In mathematics, poset is a set with partial order over it. Partial order is a such order, that not every pair of elements should be related. Partial order should be reflexive, antisymmetric, and transitive.
 
 License:                MIT
 License-file:           LICENSE

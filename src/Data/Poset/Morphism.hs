@@ -9,7 +9,6 @@ import Prelude hiding ((>>))
 --
 data Morph α = Morph [(α,α)]
 
-
 -- | Apply Morph to Poset element
 --
 infixr 7 >>
