@@ -2,7 +2,7 @@
 module Data.Poset where
 
 import Data.Function (on)
-import Data.Graph (buildG, reachable)
+import Data.Poset.Graph (graph, connectWith)
 import Data.List (intersect, nub)
 import Data.Maybe (listToMaybe)
 
@@ -27,8 +27,8 @@ fromPairs es rs = Poset es $ \a b → (a,b) `elem` rs
 --
 fromPairsE ∷ [Int] → [(Int,Int)] → Poset
 fromPairsE es rs = Poset es $ \a b → (a,b) `elem` expandedRelations
-  where expandedRelations = nub [ (a,b) | a ← es, b ← reachable graph a ]
-        graph = buildG (1, length es) rs
+  where expandedRelations = nub [ (a,b) | a ← es, b ← connectWith g a ]
+        g = graph rs
 
 -- | Get poset elements
 --

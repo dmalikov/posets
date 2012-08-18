@@ -16,11 +16,13 @@ Homepage:               _
 
 Library
   Build-Depends:        base >= 3 && < 5,
-                        containers
+                        containers,
+                        mtl
 
   HS-Source-Dirs:       src/
 
   Exposed-Modules:      Data.Poset,
+                        Data.Poset.Graph,
                         Data.Poset.Morphism,
                         Data.Semilattice
 
