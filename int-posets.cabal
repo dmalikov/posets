@@ -24,7 +24,7 @@ Library
   Exposed-Modules:      Data.Poset,
                         Data.Poset.Graph,
                         Data.Poset.Morphism,
-                        Data.Semilattice
+                        Data.Poset.Semilattice
 
   GHC-Options:          -Wall
 

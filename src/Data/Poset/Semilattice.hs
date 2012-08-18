@@ -1,5 +1,5 @@
 {-# LANGUAGE UnicodeSyntax #-}
-module Data.Semilattice where
+module Data.Poset.Semilattice where
 
 import Data.Maybe (isJust)
 
@@ -7,6 +7,6 @@ import Data.Poset
 
 -- | Semilattice is a Poset if infimum for every two elements exists
 --
-isSemilattice ∷ Poset → Bool
+isSemilattice ∷ Eq α ⇒ Poset α → Bool
 isSemilattice p@(Poset es _) = and
   [ isJust $ infimum' p a b | a ← es, b ← es ]

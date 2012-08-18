@@ -14,40 +14,40 @@ import Data.Maybe (listToMaybe)
 -- |   antisymmetric: if α ρ β and β ρ α ⇒ α = β ;
 -- |   transitive: if α ρ β and β ρ γ ⇒ α ρ γ .
 --
-type Relation = Int → Int → Bool
+type Relation α = α → α → Bool
 
-data Poset = Poset [Int] Relation
+data Poset α = Poset [α] (Relation α)
 
 -- | Build poset from a list of pairs connected by a binary relation
 --
-fromPairs ∷ [Int] → [(Int,Int)] → Poset
+fromPairs ∷ Eq α ⇒ [α] → [(α,α)] → Poset α
 fromPairs es rs = Poset es $ \a b → (a,b) `elem` rs
 
 -- | fromPairs with satisfying reflexivity and transitivity
 --
-fromPairsE ∷ [Int] → [(Int,Int)] → Poset
+fromPairsE ∷ Eq α ⇒ [α] → [(α,α)] → Poset α
 fromPairsE es rs = Poset es $ \a b → (a,b) `elem` expandedRelations
   where expandedRelations = nub [ (a,b) | a ← es, b ← connectWith g a ]
         g = graph rs
 
 -- | Get poset elements
 --
-elements ∷ Poset → [Int]
+elements ∷ Eq α ⇒ Poset α → [α]
 elements (Poset es _) = es
 
 -- | Get poset relation
 --
-relation ∷ Poset → Relation
+relation ∷ Eq α ⇒ Poset α → Relation α
 relation (Poset _ ρ) = ρ
 
 -- | Check Poset reflexivity
 --
-isReflexive ∷ Poset → Bool
+isReflexive ∷ Eq α ⇒ Poset α → Bool
 isReflexive (Poset es ρ) = and [ a `ρ` a  | a ← es ]
 
 -- | Check Poset antisymmetry
 --
-isAntisymmetric ∷ Poset → Bool
+isAntisymmetric ∷ Eq α ⇒ Poset α → Bool
 isAntisymmetric (Poset es ρ) = and
   [ a == b | a ← es, b ← es
   , a `ρ` b
@@ -56,7 +56,7 @@ isAntisymmetric (Poset es ρ) = and
 
 -- | Check Poset transitivity
 --
-isTransitive ∷ Poset → Bool
+isTransitive ∷ Eq α ⇒ Poset α → Bool
 isTransitive (Poset es ρ) = and
   [ a `ρ` c | a ← es, b ← es, c ← es
   , a `ρ` b
@@ -65,29 +65,29 @@ isTransitive (Poset es ρ) = and
 
 -- | Check poset correctness
 --
-isValid ∷ Poset → Bool
+isValid ∷ Eq α ⇒ Poset α → Bool
 isValid p = isReflexive p && isAntisymmetric p && isTransitive p
 
 -- | Find LowerCone of Poset element
 --  LowerCone is a set of elements connected with element by Binary Relation ρ
 --
-lowerCone ∷ Poset → Int → [Int]
+lowerCone ∷ Eq α ⇒ Poset α → α → [α]
 lowerCone (Poset es ρ) a = [ b | b ← es, b `ρ` a ]
 
 -- | infimums of Poset is an intersection of lowerCones of all elements
 --
-infimums ∷ Poset → [Int]
+infimums ∷ Eq α ⇒ Poset α → [α]
 infimums p@(Poset es _) = foldl1 intersect $ map (lowerCone p) es
 
 -- | infimum is an infimums with `Maybe' handle
 --
-infimum ∷ Poset → Maybe Int
+infimum ∷ Eq α ⇒ Poset α → Maybe α
 infimum = listToMaybe . infimums
 
 -- | Find infinum of 2 elements of Poset
 --
-infimums' ∷ Poset → Int → Int → [Int]
+infimums' ∷ Eq α ⇒ Poset α → α → α → [α]
 infimums' p = intersect `on` lowerCone p
 
-infimum' ∷ Poset → Int → Int → Maybe Int
+infimum' ∷ Eq α ⇒ Poset α → α → α → Maybe α
 infimum' p a b = listToMaybe $ infimums' p a b
