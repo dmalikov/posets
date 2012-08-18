@@ -4,9 +4,9 @@ In mathematics, poset is a set with partial order over it.
 Partial order is a such order, that not every pair of elements should be related.
 
 Binary relation ρ should be:
-  reflexive: `α ρ α` ;
-  antisymmetric: if `α ρ β` and `β ρ α` ⇒ `α ≡ β` ;
-  transitive: if `α ρ β` and `β ρ γ` ⇒ `α ρ γ` .
+-  reflexive: `α ρ α` ;
+-  antisymmetric: if `α ρ β` and `β ρ α` ⇒ `α ≡ β` ;
+-  transitive: if `α ρ β` and `β ρ γ` ⇒ `α ρ γ` .
 
 
 Poset could be defined by list of elements and list of releations between them:
