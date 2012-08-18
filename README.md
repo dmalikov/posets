@@ -1,7 +1,7 @@
 ## Posets
 
 In mathematics, poset is a set with partial order over it.
-Partial order is a such order, that not every pair of elements should be related.
+Partial order is a such order, that not every pair of elements should be compared.
 
 Binary relation ρ should be:
 -  reflexive: `α ρ α` ;
