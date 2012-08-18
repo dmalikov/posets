@@ -12,7 +12,7 @@ Maintainer:             Dmitry Malikov <malikov.d.y@gmail.com>
 
 Build-type:             Simple
 Cabal-version:          >= 1.6
-Homepage:               _
+Homepage:               https://github.com/dmalikov/posets
 
 Library
   Build-Depends:        base >= 3 && < 5,
@@ -31,5 +31,5 @@ Library
 
 Source-repository head
   type:                 git
-  location:             _
+  location:             git://github.com/dmalikov/posets.git
 
